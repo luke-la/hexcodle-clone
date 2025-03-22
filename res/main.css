@@ -1,0 +1,261 @@
+:root {
+  --near-white: hsl(0, 0%, 95%);
+  --light-gray: hsl(0, 0%, 75%);
+  --mid-gray: hsl(0, 0%, 45%);
+  --near-black: hsl(0, 0%, 15%);
+
+  --primary-purple: hsl(270, 87%, 69%);
+  --correct-green: hsl(134, 79%, 54%);
+  --close-orange: hsl(43, 79%, 54%);
+  --wrong-red: hsl(7, 79%, 54%);
+  --dull-purple: hsl(270, 15%, 69%);
+}
+
+body {
+  margin: 0;
+  font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+h1 {
+  display: inline-block;
+  font-size: 1.25rem;
+  margin: 1rem 0.5rem;
+}
+
+h2 {
+  font-size: 1.25rem;
+  margin: 0;
+  margin-bottom: 0.5rem;
+}
+
+/* page */
+
+header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  background-color: white;
+  border-bottom: 1px solid var(--mid-gray);
+}
+
+header button {
+  padding: 0.125rem;
+  outline: none;
+  border: 2px solid transparent;
+  border-radius: 0.25rem;
+  background-color: transparent;
+  font-size: inherit;
+  font-weight: inherit;
+}
+
+header button svg {
+  aspect-ratio: 1/1;
+  width: 1rem;
+}
+
+header button:hover {
+  color: var(--primary-purple);
+}
+
+header button:focus-visible {
+  border-color: black;
+}
+
+header button:disabled {
+  color: var(--light-gray);
+}
+
+main {
+  padding: 1rem;
+
+  background-color: var(--near-white);
+  background-repeat: repeat;
+  background-size: 0.75rem;
+  background-image: url("/res/backgroundDots.png"); 
+}
+
+#color-input-box, #guesses-box {
+  position: relative;
+  box-sizing: border-box;
+  max-width: 600px;
+  margin: auto;
+  padding: 1rem 2rem;
+
+  background-color: white;
+  border: 1px solid var(--mid-gray);
+  border-radius: 1rem;
+  text-align: center;
+}
+
+#color-input-box {
+  margin-bottom: 1rem;
+}
+
+#color-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.box {
+  aspect-ratio: 1 / 1;
+  border-radius: 0.5rem;
+}
+
+footer {
+  background-color: white;
+  padding: 1rem;
+  text-align: center;
+  border-top: 1px solid var(--mid-gray);
+}
+
+footer a {
+  color: var(--primary-purple);
+}
+
+footer p {
+  margin: 0;
+}
+
+footer .name {
+  text-decoration: none;
+}
+
+/* inputs outputs and form button */
+
+label, input, #btn-submit, #btn-share {
+  margin: 0.5rem;
+  border-radius: 0.25rem;
+  font-size: 1.25rem;
+  font-weight: bold;
+}
+
+output {
+  display: block;
+  font-size: 1.25rem;
+}
+
+input[type="text"] {
+  width: 9ch;
+  padding: 0.125rem 0.25rem;
+  outline: none;
+  border: 1px solid var(--mid-gray);
+  border-radius: 0.25rem;
+}
+
+input[type="text"]:focus {
+  transition: ease 0.1s;
+  border-color: black;
+  box-shadow: 0 0 0 1px inset black;
+}
+
+#btn-submit, #btn-share {
+  border: 0;
+  background-color: var(--primary-purple);
+  color: var(--near-white);
+}
+
+#btn-submit:disabled, #btn-share:disabled {
+  background-color: var(--mid-gray);
+}
+
+/* share button and dialog */
+
+#btn-share {
+  display: none;
+
+  position: absolute;
+  margin: 1.5rem;
+  padding: 0.25rem;
+  bottom: 0;
+  right: 0;
+
+  font-size: 1.25rem;
+}
+
+svg {
+  display: block;
+}
+
+dialog {
+  border: none;
+  border-radius: 0.5rem;
+  text-align: center;
+}
+
+dialog::backdrop {
+  background-color: #0006;
+}
+
+dialog button svg {
+  display: inline-block;
+}
+
+dialog button {
+  outline: none;
+  border: 2px solid transparent;
+  border-radius: 0.25rem;
+  font-weight: bold;
+}
+
+#btn-close-modal {
+  position: absolute;
+  top: 0.25rem;
+  right: 0.25rem;
+  background-color: transparent;
+  font-size: 1.25rem;
+}
+
+#btn-copy-share {
+  display: flex;
+  align-items: center;
+  background-color: var(--primary-purple);
+  color: var(--near-white);
+}
+
+dialog button:focus-visible {
+  border-color: black;
+}
+
+/* guesses box handling */
+
+#guesses-box {
+  min-height: 400px;
+}
+
+.guess {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0.5em 0;
+}
+
+.guess-digit {
+  display: block;
+  border: 0.25rem solid var(--wrong-red);
+  border-radius: 0.125em;
+
+  font-size: 1.25rem;
+  font-weight: bold;
+  line-height: 1.5em;
+}
+
+.guess-digit.correct {
+  border-color: var(--correct-green);
+}
+
+.guess-digit.close {
+  border-color: var(--close-orange);
+}
+
+/* responsive */
+
+@media (max-width: 738px) {
+  output {
+    width: 200px;
+    margin: auto;
+  }
+}
