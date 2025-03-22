@@ -72,7 +72,7 @@ main {
   background-color: var(--near-white);
   background-repeat: repeat;
   background-size: 0.75rem;
-  background-image: url("/res/backgroundDots.png"); 
+  background-image: url("./res/backgroundDots.png"); 
 }
 
 #color-input-box, #guesses-box {
