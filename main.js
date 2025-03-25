@@ -38,14 +38,8 @@ class RNG {
   }
 }
 
-class Results {
-  constructor (target, guesses, accuracies) {
-
-  } 
-}
-
 const dayLength = 24 * 60 * 60 * 1000;
-const startDate = new Date("2025-3-20");
+const startDate = new Date("2025-03-20");
 const maxDay = Math.round((Date.now() - startDate) / dayLength);
 const maxAttempts = 6;
 
@@ -64,8 +58,6 @@ function dateStringFromDay(days) {
   const day = String(result.getDate()).padStart(2, '0');
   return year + "-" + month + "-" + day;
 }
-
-
 
 function load() {
   // load old gamestate if exists
