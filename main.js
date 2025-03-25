@@ -39,8 +39,8 @@ class RNG {
 }
 
 const dayLength = 24 * 60 * 60 * 1000;
-const startDate = new Date("2025-03-20");
-const maxDay = Math.round((Date.now() - startDate) / dayLength);
+const startDate = new Date("2025-03-21");
+const maxDay = Math.ceil((Date.now() - startDate) / dayLength);
 const maxAttempts = 6;
 
 let day = maxDay;
@@ -49,6 +49,18 @@ let guesses = [];
 let accuracies = [];
 let attempts = 1;
 let won = false;
+
+function timeFromMilliseconds(ms) {
+  const hours = Math.trunc(ms / 1000 / 60 / 60)
+  ms -= hours * 1000 * 60 * 60
+  const minutes = Math.trunc(ms / 1000 / 60)
+  ms -= minutes * 1000 * 60
+  const seconds = Math.trunc(ms / 1000)
+
+  return String(hours).padStart(2, '0') + ":"
+  + String(minutes).padStart(2, '0') + ":"
+  + String(seconds).padStart(2, '0');
+}
 
 function dateStringFromDay(days) {
   let result = new Date(startDate.getTime());
@@ -98,10 +110,31 @@ function load() {
   if (won || attempts > 6) {
     document.getElementById("btn-share").style.display = "block";
     document.getElementById("btn-share").disabled = false;
+    if (won) {
+      let msg = "You guessed the code in ";
+      if (attempts == 1) {
+        msg += "one try!";
+      } else {
+        msg += attempts + " tries!";
+      }
+      msg += " Your score is " + getScore() + "%"
+      document.getElementById("user-output").innerHTML = msg;
+    }
+    else {
+      const msg = "Wow... You actually ran out of guesses."
+      document.getElementById("user-output").innerHTML = msg;
+    }
   }
   else {
     document.getElementById("btn-share").style.display = "none";
     document.getElementById("btn-share").disabled = true;
+    if (attempts == 6) {
+      const msg = "Last chance."
+      document.getElementById("user-output").innerHTML = msg;
+    } else {
+      const msg = "Enter your guess above."
+      document.getElementById("user-output").innerHTML = msg;
+    }
   }
 
   buildGuessDiv(guesses, accuracies);
@@ -167,30 +200,63 @@ function getGuessesStringArr() {
   return strings;
 }
 
+let timeLeftInterval;
+
+function updateTimeLeft() {
+  const tl = document.getElementById("time-left");
+  if (tl == null) return;
+
+  const timeMS = dayLength - (Date.now() - startDate) % dayLength;
+  tl.innerHTML = timeFromMilliseconds(timeMS);
+}
+
 function showWin() {
   let modal = document.getElementById("win-modal");
+
+  modal.querySelector("#lbl-share-day").innerHTML = day;
+
   let p = modal.querySelector("#sharable-results");
   p.innerHTML = "";
 
-  let strings = getGuessesStringArr();
+  const score = "Score: " + getScore() + "%"
+  let strings = [...getGuessesStringArr(), score];
   for (let i = strings.length - 1; i >= 0; i--) {
     p.append(strings[i], document.createElement("br"));
   }
+
+  timeLeftInterval = setInterval(updateTimeLeft, 200)
+  
   modal.showModal();
 }
 
 function unshowWin() {
+  clearInterval(timeLeftInterval);
   document.getElementById("win-modal").close();
 }
 
 function shareResults() {
-  let text = "";
+  let text = "Score: " + getScore() + "%\n";
   let strings = getGuessesStringArr();
   for (let i = strings.length - 1; i >= 0; i--) {
     text += strings[i] + "\n";
   }
   navigator.clipboard.writeText(text);
 }
+
+function getScore() {
+  let scoreTotal = 0;
+  
+  for (let accuracy of accuracies) {
+    for (let index in accuracy) {
+      if (accuracy[index] == 0) scoreTotal += 1;
+      else if (Math.abs(accuracy[index]) == 1) scoreTotal += 0.5;
+      else if (Math.abs(accuracy[index]) == 2) scoreTotal += 0.15;
+    }
+  }
+
+  return Math.round((scoreTotal / (accuracies.length * 6)) * 100);
+}
+
 
 function limitInput(value) {
   let temp = "";
@@ -210,7 +276,7 @@ function logSubmit(event) {
 
   // if input is invalid, return
   if (input.length < 6) {
-    userOutput.value = "A hex code must be six digits.";
+    userOutput.value = "Try using the right number of digits.";
     return;
   }
 
@@ -228,6 +294,7 @@ function logSubmit(event) {
     } else {
       msg += attempts + " tries!";
     }
+    msg += " Your score is " + getScore() + "%"
     userOutput.value = msg;
     document.getElementById("btn-share").style.display = "block";
     document.getElementById("btn-share").disabled = false;
@@ -252,9 +319,9 @@ function logSubmit(event) {
   if (!guessed) {
     attempts += 1;
     if (attempts > 6) {
-      userOutput.value = "No more guesses...";
+      userOutput.value = "Wow... You actually ran out of guesses.";
       document.getElementById("btn-submit").disabled = true;
-    } else if (attempts == 6) userOutput.value = "Last Chance.";
+    } else if (attempts == 6) userOutput.value = "Last chance.";
     else userOutput.value = "Nope. Do that again, but better.";
   } else {
     showWin();

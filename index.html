@@ -13,7 +13,8 @@
 <body onload="load()">
   <dialog id="win-modal">
     <button id="btn-close-modal" onclick="unshowWin()">&times;</button>
-    <p>GREAT JOB!</p>
+    <h2>GREAT JOB!</h2>
+    <p class="subtle">Hexcodlen't #<span id="lbl-share-day"></span></p>
     <p id="sharable-results">results</p>
     <button id="btn-copy-share" onclick="shareResults()">
       <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" stroke="currentColor"
@@ -26,6 +27,10 @@
       </svg>
       <span>Share Results</span>
     </button>
+    <p class="subtle">
+      Next puzzle in: 
+      <span id="time-left">00:00:00</span>
+    </p>
   </dialog>
 
   <header>
