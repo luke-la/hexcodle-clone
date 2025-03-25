@@ -11,43 +11,20 @@
 </head>
 
 <body onload="load()">
-  <dialog id="win-modal">
-    <button id="btn-close-modal" onclick="unshowWin()">&times;</button>
-    <h2>GREAT JOB!</h2>
-    <p class="subtle">Hexcodlen't #<span id="lbl-share-day"></span></p>
-    <p id="sharable-results">results</p>
-    <button id="btn-copy-share" onclick="shareResults()">
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" stroke="currentColor"
-        stroke-width="2" fill="none">
-        <circle cx="17" cy="6" r="3" />
-        <line x1="15" y1="7" x2="8" y2="10" />
-        <circle cx="7" cy="12" r="3" />
-        <line x1="8" y1="14" x2="15" y2="17" />
-        <circle cx="17" cy="18" r="3" />
-      </svg>
-      <span>Share Results</span>
-    </button>
-    <p class="subtle">
-      Next puzzle in: 
-      <span id="time-left">00:00:00</span>
-    </p>
-  </dialog>
-
   <header>
     <button id="btn-add-day" onclick="changeDay(1)">
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3" stroke-linecap="round" fill="none">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" stroke="currentColor"
+        stroke-width="3" stroke-linecap="round" fill="none">
         <line x1="16" y1="4" x2="8" y2="12" />
         <line x1="8" y1="12" x2="16" y2="20" />
       </svg>
     </button>
     <h1>
-      <button onclick="resetDay()">
-        Hecodlen't
-        <span id="day-counter">0</span>
-      </button>
+      <button onclick="resetDay()">Hecodlen't #<span id="day-counter">0</span></button>
     </h1>
     <button id="btn-sub-day" onclick="changeDay(-1)">
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3" stroke-linecap="round" fill="none">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" stroke="currentColor"
+        stroke-width="3" stroke-linecap="round" fill="none">
         <line x1="8" y1="4" x2="16" y2="12" />
         <line x1="16" y1="12" x2="8" y2="20" />
       </svg>
@@ -86,6 +63,29 @@
         </svg>
       </button>
     </div>
+
+    <dialog id="win-modal">
+      <button id="btn-close-modal" onclick="unshowWin()">&times;</button>
+      <h2>GREAT JOB!</h2>
+      <p class="subtle">Hexcodlen't #<span id="lbl-share-day"></span></p>
+      <p id="sharable-results">results</p>
+      <button id="btn-copy-share" onclick="shareResults()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" stroke="currentColor"
+          stroke-width="2" fill="none">
+          <circle cx="17" cy="6" r="3" />
+          <line x1="15" y1="7" x2="8" y2="10" />
+          <circle cx="7" cy="12" r="3" />
+          <line x1="8" y1="14" x2="15" y2="17" />
+          <circle cx="17" cy="18" r="3" />
+        </svg>
+        <span>Share Results</span>
+      </button>
+      <p class="subtle">
+        Next puzzle in:
+        <span id="time-left">00:00:00</span>
+      </p>
+    </dialog>
+
     <div id="guesses-box">
       <h2>Guesses</h2>
       <div id="guesses"></div>
@@ -93,10 +93,12 @@
   </main>
 
   <footer>
-    <p>An unofficial emulator/clone.</p>
-    <p>Check out the original game at <a href="https://hexcodle.com/">hexcodle.com</a></p>
+    <p>Hexcodlen't is an unofficial emulator/clone of Hexcodle.</p>
+    <p>Check out the original game, made by creators <a class="name" href="https://hannah-larsen.github.io">Hannah</a>
+      and <a class="name" href="https://ekimerton.github.io">Ekim</a>, over at <a
+        href="https://hexcodle.com/">hexcodle.com</a></p>
     <p>&mdash;</p>
-    <p>Made by <a class="name" href="https://github.com/luke-la">Luke</a></p>
+    <p>Hexcodlen't was made by <a class="name" href="https://github.com/luke-la">Luke.</a></p>
   </footer>
 </body>
 
