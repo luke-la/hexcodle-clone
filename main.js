@@ -125,10 +125,10 @@ function updateUI(fromLoad = false) {
   }
 
   // set up inputs and output based on gamestate
-  document.getElementById("btn-submit").disabled = won || attempts > 6;
+  document.getElementById("btn-submit").disabled = won || attempts > maxAttempts;
   const output = document.getElementById("user-output");
   // if the player has won or is out of attempts enable share
-  if (won || attempts > 6) {
+  if (won || attempts > maxAttempts) {
     document.getElementById("btn-share").style.display = "block";
     document.getElementById("btn-share").disabled = false;
     // if won, display score
@@ -152,7 +152,7 @@ function updateUI(fromLoad = false) {
     document.getElementById("btn-share").style.display = "none";
     document.getElementById("btn-share").disabled = true;
     // if player is nearly out of attempts, warn them
-    if (attempts == 6) {
+    if (attempts == maxAttempts) {
       output.innerHTML = "Last chance.";
     }
     // if the player has guessed less, motivate them
@@ -281,7 +281,7 @@ function shareResults() {
 
 // calculates a score based on guess accuracy
 function getScore() {
-  let scoreTotal = 0;
+  let scoreTotal = 0
 
   for (let accuracy of accuracies) {
     for (let index in accuracy) {
@@ -291,7 +291,12 @@ function getScore() {
     }
   }
 
-  return Math.round((scoreTotal / (accuracies.length * 6)) * 100);
+  for (let i = accuracies.length; i <= maxAttempts; i++) {
+    scoreTotal += maxAttempts + 1 - accuracies.length
+  }
+  scorePossible = maxAttempts * 6
+
+  return Math.round((scoreTotal / scorePossible) * 100);
 }
 
 // handles an entry of a new guess, and updates the gamestate and page with results
