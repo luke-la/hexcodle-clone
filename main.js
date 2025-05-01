@@ -294,15 +294,6 @@ function getScore() {
   return Math.round((scoreTotal / (accuracies.length * 6)) * 100);
 }
 
-// removes any input not contained withen the array of allowed digits
-function limitInput(value) {
-  let temp = "";
-  for (let char of value.toUpperCase()) {
-    if (hexChars.some((ch) => ch == char)) temp += char;
-  }
-  return temp;
-}
-
 // handles an entry of a new guess, and updates the gamestate and page with results
 function logSubmit(event) {
   event.preventDefault();
@@ -310,14 +301,27 @@ function logSubmit(event) {
   // get inupt and output and reset input
   let userInput = document.getElementById("user-input");
   let userOutput = document.getElementById("user-output");
-  let input = userInput.value;
-  userInput.value = "";
+  let input = userInput.value.toUpperCase();
 
   // if input is invalid, return
   if (input.length < 6) {
     userOutput.value = "Try using the right number of digits.";
     return;
   }
+  
+  let invalidChars = false;
+  for (let char of input) {
+    if (!hexChars.some((ch) => ch == char)) {
+      invalidChars = true;
+      break;
+    }
+  }
+  if (invalidChars) {
+    userOutput.value = "Wrong numbers. (0-9, A-F)";
+    return;
+  }
+
+  userInput.value = "";
 
   // update color of guess box
   document.getElementById("display-guessed-color").style.backgroundColor =

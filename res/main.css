@@ -125,16 +125,26 @@ footer .name {
 
 /* inputs outputs and form button */
 
+#color-input-field {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 label, input, #btn-submit, #btn-share {
   margin: 0.5rem;
-  border-radius: 0.25rem;
+  border-radius: 0.375rem;
   font-size: 1.25rem;
   font-weight: bold;
 }
 
+label {
+  margin-inline: 1rem;
+}
+
 output {
   display: block;
-  font-size: 1.25rem;
+  font-size: 1rem;
 }
 
 input[type="text"] {
@@ -143,6 +153,7 @@ input[type="text"] {
   outline: none;
   border: 1px solid var(--mid-gray);
   border-radius: 0.25rem;
+  text-transform: uppercase;
 }
 
 input[type="text"]:focus {
@@ -153,6 +164,7 @@ input[type="text"]:focus {
 
 #btn-submit, #btn-share {
   border: 0;
+  padding: 0.25rem;
   background-color: var(--primary-purple);
   color: var(--near-white);
 }
@@ -168,7 +180,7 @@ input[type="text"]:focus {
 
   position: absolute;
   margin: 1.5rem;
-  padding: 0.25rem;
+  
   bottom: 0;
   right: 0;
 
@@ -221,6 +233,7 @@ dialog button {
 
 #btn-copy-share {
   margin: 0.5rem auto;
+  padding: 0.5rem;
   display: flex;
   gap: 0.5rem;
   align-items: center;
