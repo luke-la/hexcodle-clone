@@ -125,10 +125,10 @@ function updateUI(fromLoad = false) {
   }
 
   // set up inputs and output based on gamestate
-  document.getElementById("btn-submit").disabled = won || attempts > 6;
+  document.getElementById("btn-submit").disabled = won || attempts > maxAttempts;
   const output = document.getElementById("user-output");
   // if the player has won or is out of attempts enable share
-  if (won || attempts > 6) {
+  if (won || attempts > maxAttempts) {
     document.getElementById("btn-share").style.display = "block";
     document.getElementById("btn-share").disabled = false;
     // if won, display score
@@ -152,7 +152,7 @@ function updateUI(fromLoad = false) {
     document.getElementById("btn-share").style.display = "none";
     document.getElementById("btn-share").disabled = true;
     // if player is nearly out of attempts, warn them
-    if (attempts == 6) {
+    if (attempts == maxAttempts) {
       output.innerHTML = "Last chance.";
     }
     // if the player has guessed less, motivate them
@@ -190,26 +190,38 @@ function buildGuessDiv(guesses, accuracies) {
 
   // for each set of guesses and accuracies check them and buld a row
   for (let i = guesses.length - 1; i >= 0; i--) {
-    let guess = guesses[i];
-    let accuracy = accuracies[i];
+    const guess = guesses[i];
 
-    let div = document.createElement("div");
+    let guessColor = "#"
+    for (let ch of guess) guessColor += ch
+
+    const accuracy = accuracies[i];
+
+    const div = document.createElement("div");
     div.className = "guess";
 
     for (let index in accuracy) {
-      let span = document.createElement("span");
-      span.innerHTML = guess[index];
-      span.className = "guess-digit";
+      const guessCard = document.createElement("div");
+      guessCard.className = "guess-card";
+      guessCard.style.borderColor = guessColor
 
-      if (accuracy[index] == 0) span.className += " correct";
+      const digit = document.createElement("div")
+      const wrong = document.createElement("div")
+
+      digit.innerHTML = guess[index];
+      if (accuracy[index] == 0) {
+        guessCard.className += " correct";
+        wrong.innerHTML += "\u2713";
+      } 
       else if (accuracy[index] < 3 && accuracy[index] > -3) {
-        span.className += " close";
-        span.innerHTML += accuracy[index] > 0 ? "\u2191" : "\u2193";
+        guessCard.className += " close";
+        wrong.innerHTML += accuracy[index] > 0 ? "\u2191" : "\u2193";
       } else {
-        span.innerHTML += accuracy[index] > 0 ? "\u21C8" : "\u21CA";
+        wrong.innerHTML += accuracy[index] > 0 ? "\u21C8" : "\u21CA";
       }
 
-      div.append(span);
+      guessCard.append(digit, wrong)
+      div.append(guessCard);
     }
     guessBox.append(div);
   }
@@ -221,7 +233,7 @@ function getGuessesStringArr() {
   for (let guess of accuracies) {
     let temp = "";
     for (let digit of guess) {
-      if (digit == 0) temp += "\u2714";
+      if (digit == 0) temp += "\u2713";
       else if (digit < 3 && digit > 0) temp += "\u2191";
       else if (digit > -3 && digit < 0) temp += "\u2193";
       else if (digit > 0) temp += "\u21C8";
@@ -281,7 +293,7 @@ function shareResults() {
 
 // calculates a score based on guess accuracy
 function getScore() {
-  let scoreTotal = 0;
+  let scoreTotal = 0
 
   for (let accuracy of accuracies) {
     for (let index in accuracy) {
@@ -291,16 +303,12 @@ function getScore() {
     }
   }
 
-  return Math.round((scoreTotal / (accuracies.length * 6)) * 100);
-}
-
-// removes any input not contained withen the array of allowed digits
-function limitInput(value) {
-  let temp = "";
-  for (let char of value.toUpperCase()) {
-    if (hexChars.some((ch) => ch == char)) temp += char;
+  for (let i = accuracies.length; i <= maxAttempts; i++) {
+    scoreTotal += maxAttempts + 1 - accuracies.length
   }
-  return temp;
+  scorePossible = maxAttempts * 6
+
+  return Math.round((scoreTotal / scorePossible) * 100);
 }
 
 // handles an entry of a new guess, and updates the gamestate and page with results
@@ -310,14 +318,27 @@ function logSubmit(event) {
   // get inupt and output and reset input
   let userInput = document.getElementById("user-input");
   let userOutput = document.getElementById("user-output");
-  let input = userInput.value;
-  userInput.value = "";
+  let input = userInput.value.toUpperCase();
 
   // if input is invalid, return
   if (input.length < 6) {
     userOutput.value = "Try using the right number of digits.";
     return;
   }
+  
+  let invalidChars = false;
+  for (let char of input) {
+    if (!hexChars.some((ch) => ch == char)) {
+      invalidChars = true;
+      break;
+    }
+  }
+  if (invalidChars) {
+    userOutput.value = "Wrong numbers. (0-9, A-F)";
+    return;
+  }
+
+  userInput.value = "";
 
   // update color of guess box
   document.getElementById("display-guessed-color").style.backgroundColor =
