@@ -190,26 +190,38 @@ function buildGuessDiv(guesses, accuracies) {
 
   // for each set of guesses and accuracies check them and buld a row
   for (let i = guesses.length - 1; i >= 0; i--) {
-    let guess = guesses[i];
-    let accuracy = accuracies[i];
+    const guess = guesses[i];
 
-    let div = document.createElement("div");
+    let guessColor = "#"
+    for (let ch of guess) guessColor += ch
+
+    const accuracy = accuracies[i];
+
+    const div = document.createElement("div");
     div.className = "guess";
 
     for (let index in accuracy) {
-      let span = document.createElement("span");
-      span.innerHTML = guess[index];
-      span.className = "guess-digit";
+      const guessCard = document.createElement("div");
+      guessCard.className = "guess-card";
+      guessCard.style.borderColor = guessColor
 
-      if (accuracy[index] == 0) span.className += " correct";
+      const digit = document.createElement("div")
+      const wrong = document.createElement("div")
+
+      digit.innerHTML = guess[index];
+      if (accuracy[index] == 0) {
+        guessCard.className += " correct";
+        wrong.innerHTML += "\u2713";
+      } 
       else if (accuracy[index] < 3 && accuracy[index] > -3) {
-        span.className += " close";
-        span.innerHTML += accuracy[index] > 0 ? "\u2191" : "\u2193";
+        guessCard.className += " close";
+        wrong.innerHTML += accuracy[index] > 0 ? "\u2191" : "\u2193";
       } else {
-        span.innerHTML += accuracy[index] > 0 ? "\u21C8" : "\u21CA";
+        wrong.innerHTML += accuracy[index] > 0 ? "\u21C8" : "\u21CA";
       }
 
-      div.append(span);
+      guessCard.append(digit, wrong)
+      div.append(guessCard);
     }
     guessBox.append(div);
   }
@@ -221,7 +233,7 @@ function getGuessesStringArr() {
   for (let guess of accuracies) {
     let temp = "";
     for (let digit of guess) {
-      if (digit == 0) temp += "\u2714";
+      if (digit == 0) temp += "\u2713";
       else if (digit < 3 && digit > 0) temp += "\u2191";
       else if (digit > -3 && digit < 0) temp += "\u2193";
       else if (digit > 0) temp += "\u21C8";
